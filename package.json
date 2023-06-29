@@ -7,12 +7,17 @@
     "create-sp": "dist/index.js"
   },
   "scripts": {
-    "build": "tsc && chmod +x dist/index.js"
+    "build": "tsc && chmod +x dist/index.js",
+    "lint": "eslint ."
   },
   "devDependencies": {
+    "@types/node": "^20.3.2",
     "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@typescript-eslint/parser": "^5.60.1",
     "eslint": "^8.43.0",
-    "typescript": "^5.1.6"
+    "typescript": "5.0.4"
+  },
+  "dependencies": {
+    "commander": "^11.0.0"
   }
 }
