@@ -1,7 +1,8 @@
-import { spawn } from 'child_process'
+import {spawn, StdioOptions} from 'child_process'
 
 interface Option {
-  cwd: string
+  cwd?: string,
+  stdio?: StdioOptions | undefined
 }
 
 let cwd = ''
@@ -15,7 +16,7 @@ export const exec = (command: string, option?: Option): Promise<void> => {
     }
     const child = spawn(commands[0], args, {
       cwd,
-      stdio: 'inherit'
+      stdio: option?.stdio ?? 'inherit'
     })
     child.on('close', (code: number) => {
       if (code > 0) {
