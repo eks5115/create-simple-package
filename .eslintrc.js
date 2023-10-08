@@ -5,6 +5,11 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   root: true,
   rules: {
-    indent: ['error', 2]
+    indent: ['error', 2],
+    '@typescript-eslint/ban-ts-comment': 'off'
+  },
+  env: {
+    browser: true,
+    node: true,
   }
 };
