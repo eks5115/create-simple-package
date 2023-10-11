@@ -9,7 +9,7 @@ import merge from 'deepmerge'
 
 const addWebpack = async (name: string) => {
   await exec(`cp -a ${path.resolve(__dirname, '../template/webpack')}/ ./`)
-  await exec('yarn add --dev webpack webpack-cli webpack-dev-server ts-loader html-webpack-plugin')
+  await exec('yarn add --dev webpack webpack-cli webpack-dev-server ts-loader html-webpack-plugin copy-webpack-plugin')
   const packagePath = `./${name}/package.json`
   let packageObject = await fs.readJson(packagePath)
   packageObject = merge(packageObject, {
