@@ -1,0 +1,8 @@
+*.iml
+.idea
+.git
+
+doc
+example
+
+.gitignore

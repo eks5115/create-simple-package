@@ -1,4 +1,4 @@
-import {spawn, StdioOptions} from 'child_process'
+import { spawn, StdioOptions } from 'child_process'
 
 interface Option {
   cwd?: string,

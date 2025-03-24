@@ -1,68 +1,72 @@
 #!/usr/bin/env node
 
-import { program } from 'commander'
-import { exec } from './exec'
 import path from 'path'
-import fs from 'fs-extra'
-import { confirm } from '@inquirer/prompts'
-import merge from 'deepmerge'
+import { program } from 'commander'
+import { input, select } from '@inquirer/prompts'
+import { exec } from './exec'
+import { expressTemplate, libTemplate, mergePackage } from './template'
+import type { Context } from './types'
 
-const addWebpack = async (name: string) => {
-  await exec(`cp -a ${path.resolve(__dirname, '../template/webpack')}/ ./`)
-  await exec('yarn add --dev webpack webpack-cli webpack-dev-server ts-loader html-webpack-plugin copy-webpack-plugin')
-  const packagePath = `./${name}/package.json`
-  let packageObject = await fs.readJson(packagePath)
-  packageObject = merge(packageObject, {
-    "scripts": {
-      "serve": "webpack serve --mode development",
-      "build": "webpack --mode development",
-      "lint": "eslint ."
+program.action(async () => {
+  const projectName = await input({
+    message: 'Project name',
+    required: true,
+    default: 'example'
+  })
+
+  const template = await select({
+    message: 'Template',
+    choices: [{
+      name: 'lib',
+      value: 'lib'
+    }, {
+      name: 'express',
+      value: 'express'
+    }]
+  })
+
+  // create context
+  const context: Context = {
+    package: {
+      name: projectName,
+      scripts: {
+        'clean': 'rm -rf dist',
+      }
     }
-  })
-  await fs.writeJson(packagePath, packageObject, {
-    spaces: 2,
-  })
-}
+  }
 
-program
-  .argument('name')
-  .action(async (name: string) => {
-    const isAddWebpack = await confirm({
-      message: 'Add webpack',
-      validate: value => false
+  try {
+    // if (fs.existsSync(name)) {
+    //   throw new Error(`${name} always exists`)
+    // }
+    // crate project dir
+    await exec(`mkdir -p ${projectName}`)
+    await exec('ls', {
+      cwd: projectName,
+      stdio: 'ignore'
     })
+    await exec(`cp -a ${path.resolve(__dirname, '../template/root')}/ ./`)
 
-    try {
-      if (fs.existsSync(name)) {
-        throw new Error(`${name} always exists`)
-      }
-      // crate project dir
-      await exec(`mkdir -p ${name}`)
-      await exec('ls', {
-        cwd: name,
-        stdio: 'ignore'
-      })
-      await exec(`cp -a ${path.resolve(__dirname, '../template/root')}/ ./`)
+    // pnpm
+    await exec('npm init -y')
 
-      // yarn
-      await exec('yarn init -y')
-      await exec('yarn add --dev @typescript-eslint/parser@^5.0.0 @typescript-eslint/eslint-plugin@^5.0.0 eslint typescript')
-      if (isAddWebpack) {
-        await addWebpack(name)
-      }
-
-      // git
-      await exec('git init -b master')
-      await exec('git add ./')
-      try {
-        await exec('git commit -m "init"', {
-          stdio: 'ignore'
-        })
-      } catch (e) {
-
-      }
-    } catch (e) {
-      console.error(e)
+    switch (template) {
+    case 'lib':
+      await libTemplate(context)
+      break
+    case 'express':
+      await expressTemplate(context)
+      break
     }
-  })
+
+    // merge package.json
+    await mergePackage(context)
+
+    // git
+    await exec('git init -b master')
+    await exec('git add ./')
+  } catch (e) {
+    console.error(e)
+  }
+})
 program.parse()
