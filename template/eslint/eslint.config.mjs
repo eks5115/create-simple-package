@@ -15,7 +15,9 @@ export default [
       'no-multiple-empty-lines': ['error', { 'max': 1, 'maxBOF': 0, 'maxEOF': 1 }],
       'no-trailing-spaces': ['error', { 'skipBlankLines': true }],
       'semi': ['error', 'never'],
-      'object-curly-spacing': ['error', 'always']
+      'object-curly-spacing': ['error', 'always'],
+      'space-infix-ops': ['error'],
+      'no-multi-spaces': 'error'
     }
   }
 ]
