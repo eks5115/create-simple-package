@@ -21,7 +21,7 @@ export const addEslint = async (context: Context) => {
 }
 
 export const addJest = async (context: Context) => {
-  await exec('pnpm add -D jest @types/jest babel-jest @babel/core @babel/preset-env @babel/preset-typescript')
+  await exec('pnpm add -D jest @types/jest ts-jest')
   await exec(`cp -a ${path.join(getTemplatePath(), 'jest')}/ ./`)
   context.package.scripts['test'] = 'jest'
 }

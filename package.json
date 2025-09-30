@@ -12,7 +12,9 @@
     "prepublishOnly": "pnpm lint && pnpm build"
   },
   "publishConfig": {
-    "include": ["template/eslint/eslint.config.mjs"]
+    "include": [
+      "template/eslint/eslint.config.mjs"
+    ]
   },
   "engines": {
     "node": ">=14"
@@ -26,6 +28,7 @@
     "dotenv": "^16.4.7",
     "eslint": "^9.23.0",
     "jest": "^29.7.0",
+    "ts-jest": "^29.4.4",
     "ts-node": "^10.9.1",
     "typescript": "5.0.4",
     "typescript-eslint": "^8.27.0"
