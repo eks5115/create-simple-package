@@ -34,6 +34,14 @@ export const addExpress = async (context: Context) => {
   context.package.scripts['serve'] = 'TS_NODE_BASEURL=./dist node -r tsconfig-paths/register dist/app.js'
 }
 
+export const addFastify = async (context: Context) => {
+  await exec('pnpm add fastify tsconfig-paths dotenv pino-pretty')
+  await exec('pnpm add -D ts-node-dev')
+  await exec(`cp -a ${path.join(getTemplatePath(), 'fastify')}/ ./`)
+  context.package.scripts['dev'] = 'ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/app.ts'
+  context.package.scripts['serve'] = 'TS_NODE_BASEURL=./dist node -r tsconfig-paths/register dist/app.js'
+}
+
 export const addWebpack = async (context: Context) => {
   await exec('pnpm add -D webpack webpack-cli webpack-dev-server ts-loader html-webpack-plugin copy-webpack-plugin')
   await exec(`cp -a ${path.resolve(__dirname, '../template/webpack')}/ ./`)
@@ -62,4 +70,11 @@ export const expressTemplate = async (context: Context) => {
   await addEslint(context)
   await addJest(context)
   await addExpress(context)
+}
+
+export const fastifyTemplate = async (context: Context) => {
+  await addTypescript(context)
+  await addEslint(context)
+  await addJest(context)
+  await addFastify(context)
 }

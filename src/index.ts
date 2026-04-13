@@ -4,7 +4,7 @@ import path from 'path'
 import { program } from 'commander'
 import { input, select } from '@inquirer/prompts'
 import { exec } from './exec'
-import { expressTemplate, libTemplate, mergePackage } from './template'
+import { expressTemplate, fastifyTemplate, libTemplate, mergePackage } from './template'
 import type { Context } from './types'
 
 program.action(async () => {
@@ -19,6 +19,9 @@ program.action(async () => {
     choices: [{
       name: 'lib',
       value: 'lib'
+    }, {
+      name: 'fastify',
+      value: 'fastify'
     }, {
       name: 'express',
       value: 'express'
@@ -56,6 +59,9 @@ program.action(async () => {
       break
     case 'express':
       await expressTemplate(context)
+      break
+    case 'fastify':
+      await fastifyTemplate(context)
       break
     }
 
