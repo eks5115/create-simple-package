@@ -1,6 +1,7 @@
 import fs from 'fs-extra'
 import merge from 'deepmerge'
 
+import app from './app'
 import lib from './lib'
 import fastify from './fastify'
 import express from './express'
@@ -8,6 +9,7 @@ import express from './express'
 export const TEMPLATE: {
   [key: string]: Template
 } = {
+  app,
   lib,
   fastify,
   express,
