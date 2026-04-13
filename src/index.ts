@@ -3,9 +3,8 @@
 import path from 'path'
 import { program } from 'commander'
 import { input, select } from '@inquirer/prompts'
-import { exec } from './exec'
-import { expressTemplate, fastifyTemplate, libTemplate, mergePackage } from './template'
-import type { Context } from './types'
+import { exec } from '@/exec'
+import { getTemplateOptions, mergePackage, TEMPLATE } from '@/template'
 
 program.action(async () => {
   const projectName = await input({
@@ -16,16 +15,7 @@ program.action(async () => {
 
   const template = await select({
     message: 'Template',
-    choices: [{
-      name: 'lib',
-      value: 'lib'
-    }, {
-      name: 'fastify',
-      value: 'fastify'
-    }, {
-      name: 'express',
-      value: 'express'
-    }]
+    choices: getTemplateOptions(),
   })
 
   // create context
@@ -53,17 +43,7 @@ program.action(async () => {
     // pnpm
     await exec('npm init -y')
 
-    switch (template) {
-    case 'lib':
-      await libTemplate(context)
-      break
-    case 'express':
-      await expressTemplate(context)
-      break
-    case 'fastify':
-      await fastifyTemplate(context)
-      break
-    }
+    await TEMPLATE[template](context)
 
     // merge package.json
     await mergePackage(context)
