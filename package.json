@@ -8,7 +8,10 @@
   },
   "scripts": {
     "lint": "eslint .",
+    "clean": "rm -rf dist",
+    "clean-example": "rm -rf example/*",
     "build": "tsc && chmod +x dist/index.js",
+    "start": "tsx src/index.ts",
     "prepublishOnly": "pnpm lint && pnpm build"
   },
   "publishConfig": {
@@ -29,7 +32,7 @@
     "eslint": "^9.23.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.4.4",
-    "ts-node": "^10.9.1",
+    "tsx": "^4.21.0",
     "typescript": "5.0.4",
     "typescript-eslint": "^8.27.0"
   },
